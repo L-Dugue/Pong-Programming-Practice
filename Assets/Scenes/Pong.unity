@@ -731,6 +731,7 @@ GameObject:
   m_Component:
   - component: {fileID: 788219871}
   - component: {fileID: 788219872}
+  - component: {fileID: 788219873}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -768,6 +769,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoxCollisionArea
   min: {x: -0.22, y: -0.22}
   max: {x: 0.22, y: 0.22}
+--- !u!114 &788219873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788219870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bf0acbed51f2ef4492483f47fd328f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallMovement
+  ballSpeed: 0.09
 --- !u!1 &832090306
 GameObject:
   m_ObjectHideFlags: 0

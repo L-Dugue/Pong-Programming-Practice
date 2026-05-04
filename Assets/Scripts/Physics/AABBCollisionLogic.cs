@@ -1,13 +1,40 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class AABBCollisionLogic
+public abstract class AABBCollisionLogic : MonoBehaviour
 {
+    // Private Fields
     private static float E = 1f;
+    private static List<BoxCollisionArea> boxCollisionAreas = new List<BoxCollisionArea>();
+
+    // Public Properties
+    public static List<BoxCollisionArea> BoxCollisionAreas { get { return boxCollisionAreas; }}
+
+
+    public static void GatherAllCollisionBoxes()
+    {
+        // Ensures that the Ball's collision area is NOT included in the list.
+        var tempBoxContainer = FindObjectsByType<BoxCollisionArea>(FindObjectsSortMode.None);
+        foreach (var box in tempBoxContainer)
+        {
+            if (box.GetComponent<BallMovement>() != null)
+            {
+                continue;
+            }
+
+            boxCollisionAreas.Add(box);
+        }
+
+        Debug.Log(BoxCollisionAreas.Count);
+    }
+        
+    
+
 
     // Public Static Methods
-    public static void PositionCorrection(BoxCollisionArea BoxA, BoxCollisionArea BoxB)
+    public static void PositionCorrection(BoxCollisionArea BoxA, BoxCollisionArea BoxB, bool bouceBack)
     {
         
         if(YOverlap(BoxA.collider, BoxB.collider) < XOverlap(BoxA.collider, BoxB.collider)) // OverLap on the Y
@@ -17,7 +44,7 @@ public class AABBCollisionLogic
         }
         else // OverLap on the X
         {
-            if ( 1 == 1) // If the Tangent is negative, add MPD
+            if (BoxA.GetComponent<BallMovement>().VelocityOld.normalized.x < 0) // If the Tangent is negative, add MPD (1 == 1 is a placeholder)
             {
                 BoxA.transform.position = new Vector2(BoxA.transform.position.x + XOverlap(BoxA.collider, BoxB.collider), BoxA.transform.position.y);
                 BounceBack(BoxA);
@@ -27,8 +54,10 @@ public class AABBCollisionLogic
                 BoxA.transform.position = new Vector2(BoxA.transform.position.x - XOverlap(BoxA.collider, BoxB.collider), BoxA.transform.position.y);
                 BounceBack(BoxA);
             }
-        } 
-        
+        }
+
+        if (bouceBack) { BounceBack(BoxA); }
+
     }
 
     // Private Helper Methods
@@ -40,13 +69,17 @@ public class AABBCollisionLogic
 
         // Breaking down the Vectors to the VectorNormal and VectorTangent
 
-        Vector2 VectorNormal = new Vector2(0, BoxA.gameObject.GetComponent<BallMovement>().velocityOld.y);
-        Vector2 VectorTangent = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().velocityOld.x, 0);
+        Vector2 VectorNormal = new Vector2(0, BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y);
+        Vector2 VectorTangent = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, 0);
 
         // Caclulate the Coeficient of Resitution/Rebound
         Vector2 VectorPrime = -E * VectorNormal;
    
         // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
-        BoxA.GetComponent<BallMovement>().velocityOld = VectorPrime;
+        BoxA.GetComponent<BallMovement>().VelocityOld = VectorPrime;
     }
+
+    
+
+
 }

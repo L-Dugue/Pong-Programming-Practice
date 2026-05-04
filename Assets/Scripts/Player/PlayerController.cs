@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     {
         float clampedValue = math.clamp((moveInput * moveSpeed * Time.deltaTime) + transform.position.y, -3.5f, 3.5f);
         transform.position = new Vector2(transform.position.x, clampedValue);
-        Debug.Log(moveInput * moveSpeed);
     }
 
 }
