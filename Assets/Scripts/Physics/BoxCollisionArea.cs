@@ -12,7 +12,8 @@ public class BoxCollisionArea : MonoBehaviour
     [SerializeField] private Vector2 max; // Defining Max
 
     // Properties
-    public Bounds collider {  get { return _bounds; } }
+    public Bounds Collider {  get { return _bounds; } }
+    public Vector2 CenterOfCollisionBox { set { _bounds.center = value; } }
 
     private void Awake()
     {
