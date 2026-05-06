@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     // Serialized Fields
     [SerializeField] private float moveSpeed;
 
+    // Properties
+    public float MoveInput { get { return moveInput; } }
+    
     private void Awake()
     {
         collisionArea = GetComponent<BoxCollisionArea>();
@@ -34,7 +37,8 @@ public class PlayerController : MonoBehaviour
         float clampedValue = math.clamp((moveInput * moveSpeed * Time.deltaTime) + transform.position.y, -3.5f, 3.5f);
         transform.position = new Vector2(transform.position.x, clampedValue);
         collisionArea.CenterOfCollisionBox = transform.position;
-
     }
+
+
 
 }

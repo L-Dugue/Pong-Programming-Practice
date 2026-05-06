@@ -54,7 +54,7 @@ public abstract class AABBCollisionLogic : MonoBehaviour
                 BoxA.transform.position = new Vector2(BoxA.transform.position.x - XOverlap(BoxA.Collider, BoxB.Collider), BoxA.transform.position.y);
             }
 
-            if (bouceBack) { BounceBackX(BoxA); }
+            if (bouceBack) { BounceBackFromPlayer(BoxA, BoxB.gameObject.GetComponent<PlayerController>()); }
         }
     }
 
@@ -67,29 +67,39 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
         // Breaking down the Vectors to the VectorNormal and VectorTangent
 
-        Vector2 VectorNormal = new Vector2(0, BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y);
-        Vector2 VectorTangent = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, 0);
+        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y * -1);
 
-        // Caclulate the Coeficient of Resitution/Rebound
-        Vector2 VectorPrime = -E * VectorNormal;
-   
         // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
-        BoxA.GetComponent<BallMovement>().VelocityOld = VectorPrime;
+        BoxA.GetComponent<BallMovement>().VelocityOld = Reflection;
+
+        Debug.Log(Reflection);
     }
 
-    private static void BounceBackX(BoxCollisionArea BoxA)
+    private static void BounceBackFromPlayer(BoxCollisionArea BoxA, PlayerController player)
     {
+        //string result = (time < 18) ? "Good day." : "Good evening.";
 
-        // Breaking down the Vectors to the VectorNormal and VectorTangent
+        float reflectDir = 0f;
 
-        Vector2 VectorNormal = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, 0 );
-        Vector2 VectorTangent = new Vector2( 0, BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y);
+       if(player.MoveInput >= 0.5)
+        {
+            reflectDir = 0.15f;
+        }
+       else if(player.MoveInput <= -0.5)
+        {
+            reflectDir = -0.15f;
+        }
+        else
+        {
+            reflectDir = 0f;
+        }
 
-        // Caclulate the Coeficient of Resitution/Rebound
-        Vector2 VectorPrime = -E * VectorNormal;
+
+  
+        Vector2 reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, reflectDir) * -1;
 
         // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
-        BoxA.GetComponent<BallMovement>().VelocityOld = VectorPrime;
+        BoxA.GetComponent<BallMovement>().VelocityOld = reflection;
     }
 
 
