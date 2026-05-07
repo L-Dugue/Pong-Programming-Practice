@@ -46,12 +46,12 @@ public class BallMovement : MonoBehaviour
     // Helper Methods
     private void MoveBall()
     {
-
+        //velOld = VelocityOld.normalized;
         velNew.x = Mathf.Clamp(velOld.x + ((ballSpeed * Mathf.Sign(velOld.x) * Time.deltaTime)), -0.2f, 0.2f);
-        velNew.y = Mathf.Clamp(velOld.y, -0.15f, 0.15f);
+        velNew.y = Mathf.Clamp(velOld.y, -0.2f, 0.2f);
 
         velOld = velNew; // Apply the changes made to VelNew to VelOld
-
+        //Debug.Log(velOld);
         // Pos Calculation
         gameObject.transform.position = (Vector2)gameObject.transform.position + velNew;
         collisionArea.CenterOfCollisionBox = gameObject.transform.position;

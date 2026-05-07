@@ -28,6 +28,7 @@ public abstract class AABBCollisionLogic : MonoBehaviour
         }
     }
         
+
     // Public Static Methods
     public static void PositionCorrection(BoxCollisionArea BoxA, BoxCollisionArea BoxB, bool bouceBack)
     {
@@ -70,14 +71,15 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
     private static void BounceBackFromWall(BoxCollisionArea BoxA)
     {
-        float randomReflectAmount = Random.Range(0.5f, 0.9f); // Give a random float
-        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, (BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y * randomReflectAmount) * -1);
+        float randomReflectAmount = Random.Range(0.1f, 0.3f); // Give a random float
+        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, (BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y) * -1).normalized;
+        Reflection.y *= randomReflectAmount;
         BoxA.GetComponent<BallMovement>().VelocityOld = Reflection;
     }
 
     private static void BounceBackFromPlayer(BoxCollisionArea BoxA, PlayerController player)
     {
-        Vector2 reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, player.MoveInput) * -1;
+        Vector2 reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, player.MoveInput * 0.7f) * -1;
         BoxA.GetComponent<BallMovement>().VelocityOld = reflection;
     }
 
