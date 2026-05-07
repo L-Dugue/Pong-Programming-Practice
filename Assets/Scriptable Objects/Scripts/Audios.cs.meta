@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 0e83e9ea4d148f94ab0a430a9631d6ab
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - BounceSFX: {instanceID: 0}
+  - ScoredSFX: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

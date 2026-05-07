@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameplayManager : MonoBehaviour
 {
     // Singleton Variable
-    public static GameObject Instance = null;
+    public static GameplayManager Instance = null;
 
 
     // Storing Balls in Storage
@@ -26,7 +26,7 @@ public class GameplayManager : MonoBehaviour
         // Singleton Declaration
         if (Instance == null)
         {
-            Instance = this.gameObject;
+            Instance = this;
         }
         else
         {
@@ -45,16 +45,16 @@ public class GameplayManager : MonoBehaviour
     {
         playerOneScore++;
         ResetBall();
-        Debug.Log($"PLAYER ONE HAS:{playerOneScore} POINTS");
         OnUpdateStatsEvent?.Invoke( playerOneScore, playerTwoScore );
+        AudioManager.Instance.PlayScoreAudio();
     }
 
     private void PlayerTwoScored()
     {
         playerTwoScore++;
         ResetBall();
-        Debug.Log($"PLAYER TWO HAS:{playerTwoScore} POINTS");
         OnUpdateStatsEvent?.Invoke(playerOneScore, playerTwoScore);
+        AudioManager.Instance.PlayScoreAudio();
     }
 
     private void ResetBall()
