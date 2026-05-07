@@ -15,7 +15,7 @@ public class BoxCollisionArea : MonoBehaviour
     public Bounds Collider {  get { return _bounds; } }
     public Vector2 CenterOfCollisionBox { set { _bounds.center = value; } }
 
-    private void Awake()
+    private void Start()
     {
         _bounds.center = transform.position;
         _bounds.min = min;
@@ -23,7 +23,7 @@ public class BoxCollisionArea : MonoBehaviour
     }
 
     // Draw shape of bounds
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         _bounds.min = min;
         _bounds.max = max;
@@ -33,5 +33,6 @@ public class BoxCollisionArea : MonoBehaviour
         Gizmos.DrawWireCube(_bounds.center, _bounds.size);
         Gizmos.color = Color.hotPink;
     }
+
 
 }

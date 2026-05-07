@@ -41,13 +41,22 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
         if (YOverlap(BoxA.Collider, BoxB.Collider) < XOverlap(BoxA.Collider, BoxB.Collider)) // OverLap on the Y
         {
-            BoxA.transform.position = new Vector2(BoxA.transform.position.x, BoxA.transform.position.y - YOverlap(BoxA.Collider, BoxB.Collider) + 0.1f);
+            if(Mathf.Sign(BoxA.transform.position.y) == 1)
+            {
+                BoxA.transform.position = new Vector2(BoxA.transform.position.x, BoxA.transform.position.y - YOverlap(BoxA.Collider, BoxB.Collider));
+            }
+            else
+            {
+                BoxA.transform.position = new Vector2(BoxA.transform.position.x, BoxA.transform.position.y + YOverlap(BoxA.Collider, BoxB.Collider));
+            }
+           
             if (bouceBack) { BounceBackY(BoxA); }
 
 
         }
         else // OverLap on the X
         {
+            if (BoxB.GetComponent<PlayerController>() == null) { return; }
             if (BoxA.GetComponent<BallMovement>().VelocityOld.normalized.x < 0) // If the Tangent is negative, add MPD (1 == 1 is a placeholder)
             {
                 BoxA.transform.position = new Vector2(BoxA.transform.position.x + XOverlap(BoxA.Collider, BoxB.Collider), BoxA.transform.position.y);
@@ -82,24 +91,24 @@ public abstract class AABBCollisionLogic : MonoBehaviour
     {
         //string result = (time < 18) ? "Good day." : "Good evening.";
 
-        float reflectDir = 0f;
+       // float reflectDir = 0f;
 
-       if(player.MoveInput >= 0.5)
-        {
-            reflectDir = 0.15f;
-        }
-       else if(player.MoveInput <= -0.5)
-        {
-            reflectDir = -0.15f;
-        }
-        else
-        {
-            reflectDir = 0f;
-        }
+       //if(player.MoveInput >= 0.5)
+       // {
+       //     reflectDir = 0.15f;
+       // }
+       //else if(player.MoveInput <= -0.5)
+       // {
+       //     reflectDir = -0.15f;
+       // }
+       // else
+       // {
+       //     reflectDir = 0f;
+       // }
 
 
   
-        Vector2 reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, reflectDir) * -1;
+        Vector2 reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, player.MoveInput) * -1;
 
         // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
         BoxA.GetComponent<BallMovement>().VelocityOld = reflection;

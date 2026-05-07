@@ -17,6 +17,11 @@ public class BallMovement : MonoBehaviour
         set { velOld = new Vector2(Mathf.Clamp(value.x, -10, 10), Mathf.Clamp(value.y, -10, 10)); }
     }
 
+    // Events
+    public delegate void OnPlayerScored();
+    public static event OnPlayerScored OnPlayerOneScoredTriggered;
+    public static event OnPlayerScored OnPlayerTwoScoredTriggered;
+
     private void Awake()
     {
         velOld.x = ballSpeed;
@@ -27,6 +32,14 @@ public class BallMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MoveBall();
+        if (transform.position.x >= 10)
+        {
+            OnPlayerTwoScoredTriggered?.Invoke();
+        }
+        else if (transform.position.x <= -10)
+        {
+            OnPlayerOneScoredTriggered?.Invoke();
+        }
     }
 
 
