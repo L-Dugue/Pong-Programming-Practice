@@ -18,7 +18,6 @@ public class BallCollisionDetection : MonoBehaviour
             {
                 AABBCollisionLogic.PositionCorrection(_collider, boxB, true);
                 AudioManager.Instance.PlayBounceAudio(); // Play Bounce SFX
-                Debug.Log(boxB.gameObject.name);
             }
         }
         

@@ -7,9 +7,7 @@ using UnityEngine.UIElements;
 public abstract class AABBCollisionLogic : MonoBehaviour
 {
     // Private Fields
-    private static float E = 1f;
     private static List<BoxCollisionArea> boxCollisionAreas = new List<BoxCollisionArea>();
-    private static bool bouncedLastFrame = false;
 
     // Public Properties
     public static List<BoxCollisionArea> BoxCollisionAreas { get { return boxCollisionAreas; }}
@@ -28,13 +26,8 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
             boxCollisionAreas.Add(box);
         }
-
-        Debug.Log(BoxCollisionAreas.Count);
     }
         
-    
-
-
     // Public Static Methods
     public static void PositionCorrection(BoxCollisionArea BoxA, BoxCollisionArea BoxB, bool bouceBack)
     {
@@ -77,7 +70,8 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
     private static void BounceBackFromWall(BoxCollisionArea BoxA)
     {
-        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, (BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y * 0.7f) * -1);
+        float randomReflectAmount = Random.Range(0.5f, 0.9f); // Give a random float
+        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, (BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y * randomReflectAmount) * -1);
         BoxA.GetComponent<BallMovement>().VelocityOld = Reflection;
     }
 
