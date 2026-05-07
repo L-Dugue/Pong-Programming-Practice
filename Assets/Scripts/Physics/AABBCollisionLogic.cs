@@ -3,11 +3,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 public abstract class AABBCollisionLogic : MonoBehaviour
 {
     // Private Fields
     private static float E = 1f;
     private static List<BoxCollisionArea> boxCollisionAreas = new List<BoxCollisionArea>();
+    private static bool bouncedLastFrame = false;
 
     // Public Properties
     public static List<BoxCollisionArea> BoxCollisionAreas { get { return boxCollisionAreas; }}
@@ -39,8 +41,9 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
         if (YOverlap(BoxA.Collider, BoxB.Collider) < XOverlap(BoxA.Collider, BoxB.Collider)) // OverLap on the Y
         {
-            BoxA.transform.position = new Vector2(BoxA.transform.position.x, BoxA.transform.position.y + YOverlap(BoxA.Collider, BoxB.Collider));
+            BoxA.transform.position = new Vector2(BoxA.transform.position.x, BoxA.transform.position.y - YOverlap(BoxA.Collider, BoxB.Collider) + 0.1f);
             if (bouceBack) { BounceBackY(BoxA); }
+
 
         }
         else // OverLap on the X
@@ -71,8 +74,8 @@ public abstract class AABBCollisionLogic : MonoBehaviour
 
         // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
         BoxA.GetComponent<BallMovement>().VelocityOld = Reflection;
-
         Debug.Log(Reflection);
+
     }
 
     private static void BounceBackFromPlayer(BoxCollisionArea BoxA, PlayerController player)
