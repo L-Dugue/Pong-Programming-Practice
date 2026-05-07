@@ -16,6 +16,11 @@ public class GameplayManager : MonoBehaviour
     private int playerTwoScore = 0;
 
 
+    // Events
+    public delegate void OnUpdateStats(int playerOneScore, int playerTwoScore);
+    public static event OnUpdateStats OnUpdateStatsEvent;
+
+
     private void Awake()
     {
         // Singleton Declaration
@@ -31,24 +36,28 @@ public class GameplayManager : MonoBehaviour
 
         BallMovement.OnPlayerOneScoredTriggered += PlayerOneScored;
         BallMovement.OnPlayerTwoScoredTriggered += PlayerTwoScored;
+        
     }
 
+
+    // Private Methods
     private void PlayerOneScored()
     {
         playerOneScore++;
-        UpdateBall();
+        ResetBall();
         Debug.Log($"PLAYER ONE HAS:{playerOneScore} POINTS");
-
+        OnUpdateStatsEvent?.Invoke( playerOneScore, playerTwoScore );
     }
+
     private void PlayerTwoScored()
     {
         playerTwoScore++;
-        UpdateBall();
+        ResetBall();
         Debug.Log($"PLAYER TWO HAS:{playerTwoScore} POINTS");
-
+        OnUpdateStatsEvent?.Invoke(playerOneScore, playerTwoScore);
     }
 
-    private void UpdateBall()
+    private void ResetBall()
     {
         ball.transform.position = Vector2.zero;
         ball.GetComponent<BallMovement>().VelocityOld = new Vector2(ball.GetComponent<BallMovement>().VelocityOld.x * -1, 0);
