@@ -50,14 +50,15 @@ public abstract class AABBCollisionLogic : MonoBehaviour
                 BoxA.transform.position = new Vector2(BoxA.transform.position.x, BoxA.transform.position.y + YOverlap(BoxA.Collider, BoxB.Collider));
             }
            
-            if (bouceBack) { BounceBackY(BoxA); }
+            if (bouceBack) { BounceBackFromWall(BoxA); }
 
 
         }
         else // OverLap on the X
         {
-            if (BoxB.GetComponent<PlayerController>() == null) { return; }
-            if (BoxA.GetComponent<BallMovement>().VelocityOld.normalized.x < 0) // If the Tangent is negative, add MPD (1 == 1 is a placeholder)
+            if (BoxB.GetComponent<PlayerController>() == null) { return; } // Make sure not to return if the X overlap doesn't involve the player
+
+            if (BoxA.GetComponent<BallMovement>().VelocityOld.normalized.x < 0) // If the Tangent is negative, add MPD
             {
                 BoxA.transform.position = new Vector2(BoxA.transform.position.x + XOverlap(BoxA.Collider, BoxB.Collider), BoxA.transform.position.y);
             }
@@ -74,43 +75,15 @@ public abstract class AABBCollisionLogic : MonoBehaviour
     private static float XOverlap(Bounds BoxA, Bounds BoxB) => Mathf.Min(BoxA.max.x, BoxB.max.x) - Mathf.Max(BoxA.min.x, BoxB.min.x);
     private static float YOverlap(Bounds BoxA, Bounds BoxB) => Mathf.Min(BoxA.max.y, BoxB.max.y) - Mathf.Max(BoxA.min.y, BoxB.min.y);
 
-    private static void BounceBackY(BoxCollisionArea BoxA)
+    private static void BounceBackFromWall(BoxCollisionArea BoxA)
     {
-
-        // Breaking down the Vectors to the VectorNormal and VectorTangent
-
-        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y * -1);
-
-        // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
+        Vector2 Reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, (BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.y * 0.7f) * -1);
         BoxA.GetComponent<BallMovement>().VelocityOld = Reflection;
-        Debug.Log(Reflection);
-
     }
 
     private static void BounceBackFromPlayer(BoxCollisionArea BoxA, PlayerController player)
     {
-        //string result = (time < 18) ? "Good day." : "Good evening.";
-
-       // float reflectDir = 0f;
-
-       //if(player.MoveInput >= 0.5)
-       // {
-       //     reflectDir = 0.15f;
-       // }
-       //else if(player.MoveInput <= -0.5)
-       // {
-       //     reflectDir = -0.15f;
-       // }
-       // else
-       // {
-       //     reflectDir = 0f;
-       // }
-
-
-  
         Vector2 reflection = new Vector2(BoxA.gameObject.GetComponent<BallMovement>().VelocityOld.x, player.MoveInput) * -1;
-
-        // Combination of the Vector Prime and VectorWithFriction, apply them to the veclocityOld of PhysicsMovement
         BoxA.GetComponent<BallMovement>().VelocityOld = reflection;
     }
 

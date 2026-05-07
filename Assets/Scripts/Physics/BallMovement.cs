@@ -46,10 +46,10 @@ public class BallMovement : MonoBehaviour
     // Helper Methods
     private void MoveBall()
     {
-        velOld = velOld.normalized; // Normalize Vector first before doing operations.
 
         velNew.x = Mathf.Clamp(velOld.x + ((ballSpeed * Mathf.Sign(velOld.x) * Time.deltaTime)), -0.2f, 0.2f);
         velNew.y = Mathf.Clamp(velOld.y, -0.15f, 0.15f);
+        Debug.Log(velNew);
 
         velOld = velNew; // Apply the changes made to VelNew to VelOld
 
